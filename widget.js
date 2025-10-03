@@ -4,7 +4,7 @@
 
   const style = document.createElement('style')
   style.innerHTML = `
-     * {
+    * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
@@ -236,6 +236,7 @@
   const widget = document.createElement('div');
   widget.id = 'chatbot-widget';
   widget.innerHTML = `
+    <div id="chatbot-widget">
     <button id="chat-toggle" aria-label="Abrir chat">
       <svg class="icon-chat" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
         <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
@@ -274,52 +275,52 @@
         </button>
       </div>
     </div>
+  </div>
   `
-  function init() {
-    document.body.appendChild(widget);
+  (function() {
+      const toggle = document.getElementById('chat-toggle');
+      const chatWindow = document.getElementById('chat-window');
+      const input = document.getElementById('chat-input');
+      const sendBtn = document.getElementById('chat-send-btn');
+      const messages = document.getElementById('chat-messages');
 
-    const toggle = document.getElementById('chat-toggle');
-    const chatWindow = document.getElementById('chat-window');
-    const input = document.getElementById('chat-input');
-    const sendBtn = document.getElementById('chat-send-btn');
-    const messages = document.getElementById('chat-messages');
+      toggle.addEventListener('click', function() {
+        chatWindow.classList.toggle('open');
+        toggle.classList.toggle('active');
+        if (chatWindow.classList.contains('open')) {
+          input.focus();
+        }
+      });
 
-    toggle.addEventListener('click', function () {
-      chatWindow.classList.toggle('open');
-      toggle.classList.toggle('active');
-      if (chatWindow.classList.contains('open')) {
-        input.focus();
-      }
-    });
+      function sendMessage() {
+        const text = input.value.trim();
+        if (!text) return;
 
-    function sendMessage() {
-      const text = input.value.trim();
-      if (!text) return;
+        const userMsg = document.createElement('div');
+        userMsg.className = 'message user';
+        userMsg.textContent = text;
+        messages.appendChild(userMsg);
 
-      const userMsg = document.createElement('div');
-      userMsg.className = 'chat-message user';
-      userMsg.textContent = text;
-      messages.appendChild(userMsg);
-
-      input.value = '';
-      messages.scrollTop = messages.scrollHeight;
-
-      setTimeout(function () {
-        const botMsg = document.createElement('div');
-        botMsg.className = 'chat-message bot';
-        botMsg.textContent = 'Gracias por tu mensaje. ¿En qué más puedo ayudarte?';
-        messages.appendChild(botMsg);
+        input.value = '';
         messages.scrollTop = messages.scrollHeight;
-      }, 800);
-    }
 
-    sendBtn.addEventListener('click', sendMessage);
-    input.addEventListener('keypress', function (e) {
-      if (e.key === 'Enter') {
-        sendMessage();
+        setTimeout(function() {
+          const botMsg = document.createElement('div');
+          botMsg.className = 'message bot';
+          botMsg.textContent = 'Gracias por tu mensaje. ¿En qué más puedo ayudarte?';
+          messages.appendChild(botMsg);
+          messages.scrollTop = messages.scrollHeight;
+        }, 800);
       }
-    });
-  }
+
+      sendBtn.addEventListener('click', sendMessage);
+      
+      input.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          sendMessage();
+        }
+      });
+    })();
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
