@@ -277,54 +277,56 @@
     </div>
   </div>
   `
-  (function() {
-      const toggle = document.getElementById('chat-toggle');
-      const chatWindow = document.getElementById('chat-window');
-      const input = document.getElementById('chat-input');
-      const sendBtn = document.getElementById('chat-send-btn');
-      const messages = document.getElementById('chat-messages');
+  function init() {
+    document.body.appendChild(widget);
 
-      toggle.addEventListener('click', function() {
-        chatWindow.classList.toggle('open');
-        toggle.classList.toggle('active');
-        if (chatWindow.classList.contains('open')) {
-          input.focus();
-        }
-      });
+    const toggle = document.getElementById('chat-toggle');
+    const chatWindow = document.getElementById('chat-window');
+    const input = document.getElementById('chat-input');
+    const sendBtn = document.getElementById('chat-send-btn');
+    const messages = document.getElementById('chat-messages');
 
-      function sendMessage() {
-        const text = input.value.trim();
-        if (!text) return;
-
-        const userMsg = document.createElement('div');
-        userMsg.className = 'message user';
-        userMsg.textContent = text;
-        messages.appendChild(userMsg);
-
-        input.value = '';
-        messages.scrollTop = messages.scrollHeight;
-
-        setTimeout(function() {
-          const botMsg = document.createElement('div');
-          botMsg.className = 'message bot';
-          botMsg.textContent = 'Gracias por tu mensaje. ¿En qué más puedo ayudarte?';
-          messages.appendChild(botMsg);
-          messages.scrollTop = messages.scrollHeight;
-        }, 800);
+    toggle.addEventListener('click', function () {
+      chatWindow.classList.toggle('open');
+      toggle.classList.toggle('active');
+      if (chatWindow.classList.contains('open')) {
+        input.focus();
       }
+    });
 
-      sendBtn.addEventListener('click', sendMessage);
-      
-      input.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-          sendMessage();
-        }
-      });
-    })();
+    function sendMessage() {
+      const text = input.value.trim();
+      if (!text) return;
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
+      const userMsg = document.createElement('div');
+      userMsg.className = 'message user';
+      userMsg.textContent = text;
+      messages.appendChild(userMsg);
+
+      input.value = '';
+      messages.scrollTop = messages.scrollHeight;
+
+      setTimeout(function () {
+        const botMsg = document.createElement('div');
+        botMsg.className = 'message bot';
+        botMsg.textContent = 'Gracias por tu mensaje. ¿En qué más puedo ayudarte?';
+        messages.appendChild(botMsg);
+        messages.scrollTop = messages.scrollHeight;
+      }, 800);
+    }
+
+    sendBtn.addEventListener('click', sendMessage);
+
+    input.addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') {
+        sendMessage();
+      }
+    })
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
   }
 })()
